@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健筛通居民端互动支持功能</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .function-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-header .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        /* 在线客服样式 */
+        .service-status {
+            background: #E8F5E8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #4CAF50;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .chat-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .chat-header {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: white;
+        }
+        
+        .message {
+            margin-bottom: 12px;
+            display: flex;
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message.assistant {
+            justify-content: flex-start;
+        }
+        
+        .message-bubble {
+            max-width: 75%;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .message.user .message-bubble {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .message.assistant .message-bubble {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .chat-input-area {
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 18px;
+            outline: none;
+            font-size: 13px;
+        }
+        
+        .chat-send-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        /* 专家咨询样式 */
+        .expert-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .expert-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .expert-avatar {
+            width: 60px;
+            height: 60px;
+            background: #4CAF50;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .expert-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .expert-title {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        
+        .expert-specialty {
+            background: #E8F5E8;
+            color: #2E7D32;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .consult-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        /* 社区活动样式 */
+        .activity-timeline {
+            margin-top: 15px;
+        }
+        
+        .activity-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .activity-date {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-right: 15px;
+            min-width: 60px;
+            height: fit-content;
+        }
+        
+        .activity-date .day {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .activity-date .month {
+            font-size: 12px;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .activity-desc {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        
+        .activity-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .activity-tag {
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        
+        /* 家属分享样式 */
+        .share-section {
+            background: #FFF3E0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #FF9800;
+        }
+        
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .share-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .share-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        .share-btn .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .share-btn.wechat { color: #07C160; }
+        .share-btn.sms { color: #2196F3; }
+        .share-btn.copy { color: #FF9800; }
+        .share-btn.qr { color: #9C27B0; }
+        
+        .share-content-preview {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-top: 15px;
+        }
+        
+        .preview-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .preview-text {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .info-card {
+            background: #E3F2FD;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .info-item {
+            margin: 8px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .btn-secondary {
+            background: #2196F3;
+        }
+        
+        .btn-secondary:hover {
+            background: #1976D2;
+        }
+        
+        @media (max-width: 600px) {
+            .expert-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .activity-item {
+                flex-direction: column;
+            }
+            
+            .activity-date {
+                margin-right: 0;
+                margin-bottom: 10px;
+                align-self: flex-start;
+            }
+            
+            .share-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤝 互动支持服务</h1>
+            <p>为您提供全方位的筛查支持和指导服务</p>
+        </div>
+        
+        <!-- 8.1 在线客服系统 -->
+        <div class="function-card">
+            <div class="card-header">
+                <span class="icon">💬</span>
+                8.1 在线客服系统
+            </div>
+            <div class="card-content">
+                <div class="service-status">
+                    <h4 style="margin-top: 0; color: #2E7D32;">
+                        <span class="status-indicator"></span>
+                        客服在线状态
+                    </h4>
+                    <p style="margin: 5px 0; color: #666;">课题组专业人员为您提供筛查相关问题解答和技术支持</p>
+                    <p style="margin: 5px 0; font-size: 14px; color: #666;">服务时间：工作日 8:30-17:30</p>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        💬 健筛通客服 - 在线为您服务
+                    </div>
+                    <div class="chat-messages" id="customerServiceChat">
+                        <div class="message assistant">
+                            <div class="message-bubble">
+                                您好！欢迎使用健筛通筛查服务，我是您的专属客服。有什么关于结直肠癌筛查的问题都可以问我哦！
+                            </div>
+                        </div>
+                        <div class="message assistant">
+                            <div class="message-bubble">
+                                常见咨询：<br>
+                                🧪 试纸检测方法<br>
+                                🏥 结肠镜检查预约<br>
+                                📋 筛查结果解读<br>
+                                📞 联系方式查询
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" class="chat-input" id="customerServiceInput" placeholder="请输入您的问题..." onkeypress="handleCustomerServiceEnter(event)">
+                        <button class="chat-send-btn" onclick="sendCustomerServiceMessage()">发送</button>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <h4 style="margin-top: 0; color: #1976D2;">📞 联系方式</h4>
+                    <div class="info-item">🏥 保健路社区卫生服务中心</div>
+                    <div class="info-item">📞 服务热线：13038011303</div>
+                    <div class="info-item">⏰ 非工作时间可留言，我们会及时回复</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 8.2 专家咨询服务 -->
+        <div class="function-card">
+            <div class="card-header">
+                <span class="icon">👨‍⚕️</span>
+                8.2 专家咨询服务
+            </div>
+            <div class="card-content">
+                <p style="color: #666; margin-bottom: 20px;">
+                    权威专家在线为您提供个性化的筛查指导和健康建议
+                </p>
+                
+                <div class="expert-list">
+                    <div class="expert-card">
+                        <div class="expert-avatar">👨‍⚕️</div>
+                        <div class="expert-name">李教授</div>
+                        <div class="expert-title">消化内科主任医师</div>
+                        <div class="expert-specialty">结直肠癌筛查专家</div>
+                        <br>
+                        <button class="consult-btn" onclick="consultExpert('李教授')">在线咨询</button>
+                    </div>
+                    
+                    <div class="expert-card">
+                        <div class="expert-avatar">👩‍⚕️</div>
+                        <div class="expert-name">王主任</div>
+                        <div class="expert-title">肿瘤科副主任医师</div>
+                        <div class="expert-specialty">癌症预防专家</div>
+                        <br>
+                        <button class="consult-btn" onclick="consultExpert('王主任')">在线咨询</button>
+                    </div>
+                    
+                    <div class="expert-card">
+                        <div class="expert-avatar">👨‍⚕️</div>
+                        <div class="expert-name">张医生</div>
+                        <div class="expert-title">内镜中心主治医师</div>
+                        <div class="expert-specialty">结肠镜检查专家</div>
+                        <br>
+                        <button class="consult-btn" onclick="consultExpert('张医生')">在线咨询</button>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <h4 style="margin-top: 0; color: #1976D2;">ℹ️ 咨询说明</h4>
+                    <div class="info-item">🕐 咨询时间：周一至周五 9:00-16:00</div>
+                    <div class="info-item">⚡ 响应时间：专家会在2小时内回复</div>
+                    <div class="info-item">📝 咨询范围：筛查方案、检查解读、健康指导</div>
+                    <div class="info-item">💝 完全免费：所有咨询服务均免费提供</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 8.3 社区活动概览 -->
+        <div class="function-card">
+            <div class="card-header">
+                <span class="icon">🎯</span>
+                8.3 社区活动概览
+            </div>
+            <div class="card-content">
+                <p style="color: #666; margin-bottom: 20px;">
+                    了解最新的社区筛查活动安排、健康讲座和筛查进展情况
+                </p>
+                
+                <div class="activity-timeline">
+                    <div class="activity-item">
+                        <div class="activity-date">
+                            <div class="day">15</div>
+                            <div class="month">6月</div>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">结直肠癌筛查健康讲座</div>
+                            <div class="activity-desc">
+                                特邀哈医大肿瘤医院专家讲解结直肠癌预防知识，现场答疑解惑，免费提供筛查试纸。
+                            </div>
+                            <div class="activity-meta">
+                                <span>📍 社区活动中心</span>
+                                <span>⏰ 上午9:00-11:00</span>
+                                <span class="activity-tag">健康讲座</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-date">
+                            <div class="day">20</div>
+                            <div class="month">6月</div>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">免费筛查活动日</div>
+                            <div class="activity-desc">
+                                社区集中筛查活动，现场提供试纸检测指导，专业医生现场答疑，预约结肠镜检查。
+                            </div>
+                            <div class="activity-meta">
+                                <span>📍 保健路社区卫生服务中心</span>
+                                <span>⏰ 全天8:00-17:00</span>
+                                <span class="activity-tag">筛查活动</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-date">
+                            <div class="day">25</div>
+                            <div class="month">6月</div>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">筛查进展情况通报</div>
+                            <div class="activity-desc">
+                                本月社区筛查情况总结：已完成筛查156人，阳性结果12例，均已安排进一步检查。
+                            </div>
+                            <div class="activity-meta">
+                                <span>📊 筛查覆盖率：68%</span>
+                                <span>✅ 随访完成率：100%</span>
+                                <span class="activity-tag">进展通报</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="viewMoreActivities()">查看更多活动</button>
+                    <button class="btn btn-secondary" onclick="subscribeActivity()">订阅活动通知</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 8.4 家属参与功能 -->
+        <div class="function-card">
+            <div class="card-header">
+                <span class="icon">👨‍👩‍👧‍👦</span>
+                8.4 家属参与功能
+            </div>
+            <div class="card-content">
+                <div class="share-section">
+                    <h4 style="margin-top: 0; color: #F57C00;">💝 关爱家人健康</h4>
+                    <p style="margin: 5px 0; color: #666;">
+                        将筛查信息和健康建议分享给家属，让家人了解您的健康状况，获得更多支持和关爱。
+                    </p>
+                </div>
+                
+                <div class="share-content-preview">
+                    <div class="preview-title">📋 分享内容预览</div>
+                    <div class="preview-text">
+                        我正在参加社区的结直肠癌免费筛查项目，这是一个很好的早期发现疾病的机会。结直肠癌通过早期筛查，治愈率可达90%以上。如果您也在45-74岁年龄段，建议您也关注一下。
+                        <br><br>
+                        📞 咨询电话：13038011303<br>
+                        🏥 保健路社区卫生服务中心
+                    </div>
+                </div>
+                
+                <div class="share-buttons">
+                    <div class="share-btn wechat" onclick="shareToWechat()">
+                        <div class="icon">💬</div>
+                        <div>微信分享</div>
+                    </div>
+                    <div class="share-btn sms" onclick="shareToSMS()">
+                        <div class="icon">📱</div>
+                        <div>短信分享</div>
+                    </div>
+                    <div class="share-btn copy" onclick="copyShareContent()">
+                        <div class="icon">📋</div>
+                        <div>复制链接</div>
+                    </div>
+                    <div class="share-btn qr" onclick="generateQR()">
+                        <div class="icon">📱</div>
+                        <div>生成二维码</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <h4 style="margin-top: 0; color: #1976D2;">👨‍👩‍👧‍👦 家庭支持的重要性</h4>
+                    <div class="info-item">❤️ 家人的理解和支持能有效缓解筛查焦虑</div>
+                    <div class="info-item">👫 共同关注健康，建立家庭健康意识</div>
+                    <div class="info-item">🤝 家属陪同检查，提高筛查依从性</div>
+                    <div class="info-item">📢 扩大筛查宣传，让更多人受益</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 客服系统功能
+        function sendCustomerServiceMessage() {
+            const input = document.getElementById('customerServiceInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addCustomerServiceMessage(message, 'user');
+            input.value = '';
+            
+            setTimeout(() => {
+                const reply = getCustomerServiceReply(message);
+                addCustomerServiceMessage(reply, 'assistant');
+            }, 1000);
+        }
+        
+        function addCustomerServiceMessage(text, sender) {
+            const messagesContainer = document.getElementById('customerServiceChat');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            bubbleDiv.innerHTML = text;
+            
+            messageDiv.appendChild(bubbleDiv);
+            messagesContainer.appendChild(messageDiv);
+            
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function getCustomerServiceReply(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('试纸') || lowerMessage.includes('检测')) {
+                return '大便隐血试纸检测很简单：<br>1. 正常排便后采集样本<br>2. 按说明书操作试纸<br>3. 等待结果显示<br>如需详细指导，请拨打13038011303';
+            } else if (lowerMessage.includes('结肠镜') || lowerMessage.includes('预约')) {
+                return '结肠镜检查完全免费！合作医院有：<br>• 哈医大附属肿瘤医院<br>• 黑龙江省人民医院<br>• 哈尔滨市第一医院<br>• 哈尔滨市第二医院<br>请联系13038011303预约';
+            } else if (lowerMessage.includes('结果') || lowerMessage.includes('报告')) {
+                return '关于筛查结果：<br>• 阴性：建议1-2年后复查<br>• 阳性：需要进一步结肠镜检查<br>• 我们会有专业人员详细解读结果<br>不用担心，早发现早治疗！';
+            } else {
+                return '感谢您的咨询！您可以：<br>🔸 拨打热线：13038011303<br>🔸 前往保健路社区卫生服务中心<br>🔸 咨询在线专家<br>我们随时为您服务！';
+            }
+        }
+        
+        function handleCustomerServiceEnter(event) {
+            if (event.key === 'Enter') {
+                sendCustomerServiceMessage();
+            }
+        }
+        
+        // 专家咨询功能
+        function consultExpert(expertName) {
+            alert(`正在连接${expertName}，请稍候...`);
+            // 这里可以跳转到专家咨询页面或开启专家聊天
+        }
+        
+        // 社区活动功能
+        function viewMoreActivities() {
+            alert('跳转到活动详情页面...');
+        }
+        
+        function subscribeActivity() {
+            alert('活动通知订阅成功！我们会及时通知您最新活动信息。');
+        }
+        
+        // 家属分享功能
+        function shareToWechat() {
+            alert('即将跳转到微信分享...');
+        }
+        
+        function shareToSMS() {
+            const shareText = '我正在参加社区的结直肠癌免费筛查项目，这是一个很好的早期发现疾病的机会。如果您也在45-74岁年龄段，建议您也关注一下。咨询电话：13038011303';
+            if (navigator.share) {
+                navigator.share({
+                    title: '健康筛查分享',
+                    text: shareText
+                });
+            } else {
+                alert('分享内容已复制，您可以发送短信给家人');
+            }
+        }
+        
+        function copyShareContent() {
+            const shareText = '我正在参加社区的结直肠癌免费筛查项目，这是一个很好的早期发现疾病的机会。咨询电话：13038011303，保健路社区卫生服务中心';
+            navigator.clipboard.writeText(shareText).then(() => {
+                alert('分享内容已复制到剪贴板！');
+            });
+        }
+        
+        function generateQR() {
+            alert('正在生成分享二维码...');
+        }
+    </script>
+</body>
+</html>
